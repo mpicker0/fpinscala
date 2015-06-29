@@ -35,8 +35,49 @@ object MyModule {
   }
 
   // Exercise 1: Write a function to compute the nth fibonacci number
+  // Alternative implementations:
+  //   fibHardcoded
+  //   fibBasicRecursive
+  //   fibRecursive
+  //   fibStream
+  def fib(n: Int): Int = fibStream(n)
 
-  def fib(n: Int): Int = ???
+  def fibBasicRecursive(n: Int): Int = n match {
+    case 0 => 0
+    case 1 => 1
+    // This implementation works but is wasteful
+    case x => fib(x - 2) + fib(x - 1)
+  }
+
+  def fibRecursive(n: Int): Int = {
+    /* Given a pair of adjacent Fibonacci numbers, return the next pair */
+    def fibNextPair(pair: (Int, Int)): (Int, Int) = pair match {
+      case (x, y) => (y, x + y)
+    }
+    /* Return the nth pair of adjacent Fibonacci numbers */
+    def fibNthPair(x: Int): (Int, Int) = x match {
+      case 0 => (0, 1)
+      case n => fibNextPair(fibNthPair(n-1))
+    }
+    val tuple = fibNthPair(n)
+    tuple._1
+  }
+
+  def fibStream(n: Int): Int = {
+    def stream: Stream[Int] =
+      0 #:: 1 #:: stream.zip(stream.tail).map {n => n._1 + n._2}
+    stream.take(n+1).last
+  }
+
+  def fibHardcoded(n: Int): Int = n match {
+    case 0 => 0
+    case 1 => 1
+    case 2 => 1
+    case 3 => 2
+    case 4 => 3
+    case 5 => 5
+    case 6 => 8
+  }
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = {
