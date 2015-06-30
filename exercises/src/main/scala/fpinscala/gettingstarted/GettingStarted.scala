@@ -48,7 +48,7 @@ object MyModule {
     case 0 => 0
     case 1 => 1
     // This implementation works but is wasteful
-    case x => fib(x - 2) + fib(x - 1)
+    case x => fibBasicRecursive(x - 2) + fibBasicRecursive(x - 1)
   }
 
   def fibRecursive(n: Int): Int = {
@@ -68,6 +68,7 @@ object MyModule {
   def fibTailRecursive(n: Int): Int = {
     // I want the nth Fibonacci number; x and y represent the current pair.
     // Keep counting down until reaching zero, adding to the pair along the way
+    @annotation.tailrec
     def fib(n: Int, x: Int, y: Int): Int = n match {
       case 0 => x
       case _ => fib(n - 1, y, x + y)
@@ -78,6 +79,7 @@ object MyModule {
   // Same as above, but use a tuple instead of having the x and y terms bare.
   // More readable?
   def fibTailRecursiveTuple(n: Int): Int = {
+    @annotation.tailrec
     def fib(n: Int, pair: (Int, Int)): Int = (n, pair) match {
       case (0, (x, y)) => x
       case (n, (x, y)) => fib(n - 1, (y, x + y))
