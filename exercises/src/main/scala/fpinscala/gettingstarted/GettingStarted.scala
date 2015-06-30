@@ -39,8 +39,10 @@ object MyModule {
   //   fibHardcoded
   //   fibBasicRecursive
   //   fibRecursive
+  //   fibTailRecursive
+  //   fibTailRecursiveTuple
   //   fibStream
-  def fib(n: Int): Int = fibStream(n)
+  def fib(n: Int): Int = fibTailRecursiveTuple(n)
 
   def fibBasicRecursive(n: Int): Int = n match {
     case 0 => 0
@@ -61,6 +63,26 @@ object MyModule {
     }
     val tuple = fibNthPair(n)
     tuple._1
+  }
+
+  def fibTailRecursive(n: Int): Int = {
+    // I want the nth Fibonacci number; x and y represent the current pair.
+    // Keep counting down until reaching zero, adding to the pair along the way
+    def fib(n: Int, x: Int, y: Int): Int = n match {
+      case 0 => x
+      case _ => fib(n - 1, y, x + y)
+    }
+    fib(n, 0, 1)
+  }
+
+  // Same as above, but use a tuple instead of having the x and y terms bare.
+  // More readable?
+  def fibTailRecursiveTuple(n: Int): Int = {
+    def fib(n: Int, pair: (Int, Int)): Int = (n, pair) match {
+      case (0, (x, y)) => x
+      case (n, (x, y)) => fib(n - 1, (y, x + y))
+    }
+    fib(n, (0, 1))
   }
 
   def fibStream(n: Int): Int = {
